@@ -15,6 +15,7 @@ class Corgi:
         self.velocity = 0
         self.jump = False
         self.walking = False
+        #direction : 1=right , -1=left
         self.walking_direction = 1
         self.location = start_location
 
