@@ -1,7 +1,6 @@
 # CorgiGame
-corgi game using Pyxel library
+a game about corgi eating bacon and escaping broccoli using Pyxel library
 
-Implementing pltformer game using pyxel library
 
 #Thanks to
 * u/timbledum - you're the man!
