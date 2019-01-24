@@ -55,12 +55,6 @@ class Game:
 
     def eat(self):
         direction = self.corgi.walking_direction
-        """
-        if direction is -1:
-            offset = LEFT_BACON
-        else:
-            offset = RIGHT_BACON
-        """
         offset = self.bacon_offset.get(direction)
         if self.corgi.location.x+(offset) == self.bacon.location.x:
             self.bacon.eaten = True
