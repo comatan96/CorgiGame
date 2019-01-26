@@ -28,7 +28,6 @@ class Bacon:
     
     def draw_bacon(self):
         location = self.location
-        #pyxel.cls(0)
         pyxel.blt(x=location.x,y=location.y,img = 1, u=16,v=0,w=7,h=7,colkey=0)
 
   

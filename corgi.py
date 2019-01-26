@@ -2,23 +2,26 @@ import pyxel
 import os
 from collections import namedtuple
 
+"""
+CONSTANTS
+"""
 Point = namedtuple('location',['x','y'])
 WIDTH = 255
 HEIGHT = 255
 FLOOR = HEIGHT - 50
 START_LOCATION = Point((WIDTH/8),FLOOR)
-assets = os.path.join(os.getcwd(),os.path.dirname(__file__),'resources.pyxel')
+
 class Corgi:
     def __init__(self, start_location):
-        pyxel.load(assets)
+        """
+        Initializing the default corgi values
+        """
         self.lives = 3
         self.velocity = 0
         self.jump = False
-        self.walking = False
-        #direction : 1=right , -1=left
-        self.walking_direction = 1
+        self.walking = False 
+        self.walking_direction = 1 # direction : 1=right , -1=left
         self.location = start_location
-
         self.run_animation = 0
 
     def display_corgi(self):

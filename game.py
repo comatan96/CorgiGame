@@ -10,10 +10,10 @@ Point = namedtuple("point",['x','y'])
 WIDTH = 255
 HEIGHT = 255
 FLOOR = HEIGHT-50
-START_LOCATION = Point((WIDTH/8),FLOOR)
+START_LOCATION = Point((WIDTH/2),FLOOR)
 LIVES_LOCATION = Point((5),HEIGHT-250)
-LEFT_BACON = -6.875
-RIGHT_BACON = 8.125
+LEFT_BACON = -6.5
+RIGHT_BACON = 8.5
 assets = os.path.join(os.getcwd(),os.path.dirname(__file__),'resources.pyxel')
 
 class Game:
@@ -21,16 +21,14 @@ class Game:
         pyxel.init(WIDTH,HEIGHT,caption="Corgi",fps=50)
         pyxel.load(assets)
         self.corgi = Corgi(START_LOCATION)
-        self.lives_location = LIVES_LOCATION
-        self.run_animation = 0
         self.bacon = Bacon()
         self.bacon_offset = {-1: LEFT_BACON, 1: RIGHT_BACON}
+        self.lives_location = LIVES_LOCATION
         pyxel.run(self.update, self.draw)
         
     def update(self):
         if self.corgi.lives != -1:
             self.corgi.update_corgi_location()
-            #self.bacon.update_bacon_location()
             self.eat()
             self.track_location()
               
@@ -56,8 +54,9 @@ class Game:
     def eat(self):
         direction = self.corgi.walking_direction
         offset = self.bacon_offset.get(direction)
-        if self.corgi.location.x+(offset) == self.bacon.location.x:
-            self.bacon.eaten = True
+        if not self.corgi.jump:
+            if self.corgi.location.x+(offset) == self.bacon.location.x:
+                self.bacon.eaten = True
             
     
     def track_location(self):
