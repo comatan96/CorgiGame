@@ -23,10 +23,15 @@ class Corgi:
         self.walking_direction = 1 # direction : 1=right , -1=left
         self.location = start_location
         self.run_animation = 0
+        self.hit = False
 
     def display_corgi(self):
+        """
+        if self.hit:
+            self.hit_by_ghost()
+        """
         if self.walking:
-            self.corgi_run_right()
+            self.corgi_run()
         else:
             self.draw_corgi_stand()
 
@@ -63,17 +68,25 @@ class Corgi:
             if self.location.y > FLOOR:
                 self.jump = False
                 self.location = self.location._replace(y=FLOOR)
+        
+        if self.hit:
+            location = self.location
+            self.location = self.location._replace(x = location.x + (20*self.walking_direction))
+            self.lives -=1
+            self.hit = False
             
     
     def draw_corgi_stand(self):
         direction = self.walking_direction
         pyxel.blt(x = self.location.x, y = self.location.y, img = 0, u = 0, v =0, w=11*direction, h =12, colkey=0)
 
-    def corgi_run_right(self):
+    def corgi_run(self):
         location = self.location
         direction = self.walking_direction
 
-        if self.run_animation > 25: self.run_animation=0
+        if self.run_animation > 25:
+            self.run_animation=0
         if self.run_animation <= 25:
             pyxel.blt(x=location.x, y=location.y, img = 0, u = 0, v=16* (self.run_animation // 5), w=11*direction, h=12, colkey=0)
             self.run_animation+=1
+
