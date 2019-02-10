@@ -7,7 +7,7 @@ CONSTANTS
 """
 Point = namedtuple('location',['x','y'])
 WIDTH = 255
-HEIGHT = 255
+HEIGHT = 180
 FLOOR = HEIGHT - 50
 START_LOCATION = Point((WIDTH/8),FLOOR)
 
@@ -25,17 +25,19 @@ class Corgi:
         self.run_animation = 0
         self.hit = False
 
+
+    """
+    handle the displaying of the corgi
+    """
     def display_corgi(self):
-        """
-        if self.hit:
-            self.hit_by_ghost()
-        """
         if self.walking:
             self.corgi_run()
         else:
             self.draw_corgi_stand()
 
-
+    """
+    handle the corgi state changing
+    """
     def update_corgi_location(self):
         self.walking = False
         if pyxel.btn(pyxel.KEY_RIGHT) and not pyxel.btn(pyxel.KEY_LEFT):
@@ -71,11 +73,15 @@ class Corgi:
         
         if self.hit:
             location = self.location
-            self.location = self.location._replace(x = location.x + (20*self.walking_direction))
+            self.velocity = -9
+            self.jump = True
+            self.location = self.location._replace(x = location.x + (10*self.walking_direction))
             self.lives -=1
             self.hit = False
-            
-    
+        
+    """
+    handle corgi animations - standing and running
+    """
     def draw_corgi_stand(self):
         direction = self.walking_direction
         pyxel.blt(x = self.location.x, y = self.location.y, img = 0, u = 0, v =0, w=11*direction, h =12, colkey=0)

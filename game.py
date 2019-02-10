@@ -12,11 +12,11 @@ CONSTANTS
 """
 Point = namedtuple("point",['x','y'])
 WIDTH = 255
-HEIGHT = 255
+HEIGHT = 180
 FLOOR = HEIGHT-50
 FPS = 50
 START_LOCATION = Point((WIDTH/2),FLOOR)
-LIVES_LOCATION = Point((5),HEIGHT-250)
+LIVES_LOCATION = Point(5,HEIGHT-250)
 OFFSET_LEFT = -6.5
 OFFSET_RIGHT = 8.5
 assets = os.path.join(os.getcwd(),os.path.dirname(__file__),'resources.pyxel')
@@ -39,62 +39,77 @@ class Game:
         
     """
     On update
+    update all objects inside the game window each frame
     """
     def update(self):
-        if self.corgi.lives != -1:  # check for life count
+        # as long as the corgi have lives
+        if self.corgi.lives != -1:
             self.corgi.update_corgi_location()
             self.ghost.update_ghosts()
             self.update_life_count()
             self.eat()
-            self.track_location()
             self.background.update_clouds()
 
-        else:
-            pass      
-        
-        if pyxel.btn(pyxel.KEY_Q):
+        #handle quit buttons
+        if pyxel.btn(pyxel.KEY_Q) or pyxel.btn(pyxel.KEY_ESCAPE):
             pyxel.quit()
         
+    """
+    On draw
+    Handle the drawing of those:
+    Corgi, Bacons, Clouds, Sky, Floor, Lives and ghosts!
+    """
     def draw(self):
         pyxel.cls(0)
-        self.background.display_sky()
+        self.background.disaply_background()
         self.draw_lives()
         self.draw_floor()
         self.corgi.display_corgi()
         self.bacon.disaply_bacon()
         self.ghost.activate_ghost()
 
+        # Draw score
+        pyxel.text(x= WIDTH/1.275, y= HEIGHT//90, s="score: " + str(self.bacon.SCORE), col = 7)
 
+        # if out of lives
+        if self.corgi.lives == -1:
+            pyxel.cls(0)
+            pyxel.text(x = WIDTH/2, y= HEIGHT/2, s= "GAME OVER", col= 1)
+
+    """
+    handle floor drawing
+    """
     def draw_floor(self):
         pyxel.bltm(x= 0,y= FLOOR+12,tm= 0,u= 0,v= 0,w= 35,h= 5)
 
+    """
+    handle lives drawing
+    """
     def draw_lives(self):
         x =int(self.lives_location.x)
         for heart in range (0,self.corgi.lives):
             pyxel.blt(x = x, y = self.lives_location.y, img = 0, u = 16, v = 0, w = 8, h = 8, colkey=0)
             x+=9
 
+    """
+    handle the eating mechanism
+    """
     def eat(self):
-        direction = self.corgi.walking_direction
-        offset = self.offset_map.get(direction)
         if not self.corgi.jump:
-            if self.corgi.location.x + offset == self.bacon.location.x:
+            if abs(self.corgi.location.x - self.bacon.location.x) <= 8:
                 self.bacon.eaten = True
+                self.bacon.SCORE +=20
 
-              
+    """
+    handle the life count with ineraction with ghosts
+    """    
     def update_life_count(self):
-        direction = self.corgi.walking_direction
-        offset = self.offset_map.get(direction)
-        if self.corgi.location.x + offset + (self.corgi.walking_direction*.75) == self.ghost.location.x:
-            if self.corgi.location.y < 210: 
+        if abs(self.corgi.location.x - self.ghost.location.x) <= 8:
+            if self.corgi.location.y > HEIGHT - 60: 
                 self.corgi.hit = True
                 self.ghost.appear = False
-    
-    
-    def track_location(self):
-        print(self.corgi.location.y)
-        print(self.ghost.location.x)
-        print(self.ghost.location.y)
-  
+                self.bacon.SCORE -= 10
+        pyxel.text(x = 200, y= 30, s = "-10", col = 8)
+
 
 Game()

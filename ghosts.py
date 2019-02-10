@@ -8,7 +8,7 @@ CONSTANTS
 """
 Point = namedtuple ('location', ['x','y'])
 WIDTH = 255
-HEIGHT = 255
+HEIGHT = 180
 FLOOR = HEIGHT - 50
 RIGHT = 0
 LEFT = 255
@@ -19,6 +19,10 @@ BIG_GHOST = {'u':0, 'v':48, 'w':16, 'h':15}
 GHOST_TYPES = [SMALL_GHOST,MID_GHOST]
 
 class Ghost:
+
+    """
+    Initial ghost
+    """
     def __init__(self, ghost_type = MID_GHOST):
         self.ghost_type = ghost_type
         self.x = random.sample([RIGHT,LEFT],1)
@@ -29,11 +33,16 @@ class Ghost:
         self.max_ghosts = 1
         self.appear = True
 
+    """
+    handle the ghost view
+    """
     def display_ghost(self):
         if self.appear:
             self.activate_ghost()
         
-
+    """
+    update ghost state
+    """
     def update_ghosts(self):
         if self.location.x >= -30 and self.location.x <= 270:
             location = self.location
@@ -42,15 +51,17 @@ class Ghost:
             self.appear = False
             self.activate_ghost()
 
-
+    """
+    activate the ghosts to move on the map
+    """
     def activate_ghost(self):
         if self.appear:
             location = self.location
             direction = self.ghost_direction
-            u = self.ghost_type.get("u")
-            v = self.ghost_type.get("v")
-            w = self.ghost_type.get("w")
-            h = self.ghost_type.get("h")
+
+            #pairs of (u,v) and (w,h)
+            u, v= self.ghost_type.get("u"), self.ghost_type.get("v")
+            w, h= self.ghost_type.get("w"), self.ghost_type.get("h")
             if self.ghost_animation > 1:
                 self.ghost_animation = 0
             if self.ghost_animation <= 1:

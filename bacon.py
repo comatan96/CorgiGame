@@ -5,10 +5,12 @@ from random import randint
 
 Point = namedtuple('location',['x','y'])
 WIDTH = 255
-HEIGHT = 255
+HEIGHT = 180
 FLOOR = HEIGHT-50
 
 class Bacon:
+
+    SCORE = 0
 
     def __init__(self):
         self.location = Point(randint(0,WIDTH-7),FLOOR+2)
@@ -22,7 +24,10 @@ class Bacon:
       
     def update_bacon_location(self):
             location = self.location
-            self.location = location._replace(x=randint(0,WIDTH-15))
+            new_location = randint(15,WIDTH-15)
+            while abs(new_location - location.x) <= 20:
+                new_location = randint(15,WIDTH-15)
+            self.location = location._replace(x=new_location)
             self.eaten = False
 
     
