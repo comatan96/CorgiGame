@@ -111,5 +111,4 @@ class Game:
                 self.bacon.SCORE -= 10
         pyxel.text(x = 200, y= 30, s = "-10", col = 8)
 
-
 Game()

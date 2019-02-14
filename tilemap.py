@@ -34,7 +34,7 @@ class Background:
     on game update
     """
     def update_clouds(self):
-        if self.first_cloud_location.x > -200:
+        if self.first_cloud_location.x >= -200:
             first_location = self.first_cloud_location
             self.first_cloud_location = self.first_cloud_location._replace(x= first_location.x - .5)
             second_location = self.second_cloude_location
